@@ -4,6 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 
+
 const { TextArea } = Input;
 const { Option } = Select;
 const { Content } = Layout;
@@ -69,7 +70,7 @@ const Translate = () => {
 
       if (response.data.status === 'done') {
         downloadTranslatedDocument(documentId, documentKey);
-      } else if (response.data.status === 'translating') {
+      } else if (response.data.status === 'translating' || response.data.status === 'queued') {
         setTimeout(() => pollDocumentTranslation(documentId, documentKey), 5000);
       } else {
         message.error('文件翻译失败，请稍后再试。');
@@ -96,21 +97,23 @@ const Translate = () => {
   };
 
   return (
-    <Layout style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <Content>
-        <h1>实时翻译</h1>
-        <TextArea
-          value={inputText}
-          onChange={e => setInputText(e.target.value)}
-          placeholder="输入文本..."
-          style={{ marginBottom: '20px' }}
-        />
-        <Form layout="inline" style={{ marginBottom: '20px' }}>
+    <Layout style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
+      <Content style={{ padding: '20px', maxWidth: '95%', width: '100%' }}>
+        <div style={{ textAlign: 'center', marginBottom: '20px', fontSize: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <img src="/translator_icon.png" alt="" style={{
+            width: '90px',
+            paddingTop: '5px',
+            paddingRight: '20px',
+          }} />
+          <h1>猫头鹰翻译</h1>
+        </div>
+
+        <Form layout="inline" style={{ paddingTop: '30px', marginBottom: '30px', textAlign: 'center', justifyContent: 'center' }}>
           <Form.Item label="源语言">
             <Select
               value={sourceLang}
               onChange={value => setSourceLang(value)}
-              style={{ width: 120, marginRight: 10 }}
+              style={{ width: 100, marginRight: 10 }}
             >
               <Option value="en">英语</Option>
               <Option value="zh">中文</Option>
@@ -122,7 +125,7 @@ const Translate = () => {
             <Select
               value={targetLang}
               onChange={value => setTargetLang(value)}
-              style={{ width: 120, marginRight: 10 }}
+              style={{ width: 100, marginRight: 10 }}
             >
               <Option value="zh">中文</Option>
               <Option value="en">英语</Option>
@@ -130,18 +133,39 @@ const Translate = () => {
               <Option value="fr">法语</Option>
             </Select>
           </Form.Item>
+          <Button type="primary" onClick={translateText} style={{ marginRight: '10px' }}>
+            翻译
+          </Button>
+          <Upload beforeUpload={handleFileUpload} showUploadList={true}>
+            <Button icon={<UploadOutlined />}>上传文件</Button>
+          </Upload>
+          <Button type="primary" onClick={translateDocument} style={{ marginLeft: '10px' }}>
+            翻译文件
+          </Button>
         </Form>
-        <Button type="primary" onClick={translateText} style={{ marginRight: '10px' }}>
-          翻译
-        </Button>
-        <Upload beforeUpload={handleFileUpload} showUploadList={false}>
-          <Button icon={<UploadOutlined />}>上传文件</Button>
-        </Upload>
-        <Button type="primary" onClick={translateDocument} style={{ marginLeft: '10px' }}>
-          翻译文件
-        </Button>
-        <div id="output" style={{ marginTop: '20px', border: '1px solid #ccc', padding: '10px', minHeight: '100px' }}>
-          {outputText}
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+          <TextArea
+            value={inputText}
+            onChange={e => setInputText(e.target.value)}
+            placeholder="输入文本..."
+            style={{ width: '48%', height: '300px' }}
+          />
+          <div
+            id="output"
+            style={{
+              width: '48%',
+              height: '300px',
+              border: '1px solid #ccc',
+              borderRadius: '6px',
+              padding: '10px',
+              minHeight: '100px',
+              overflowY: 'auto',
+              backgroundColor: '#EBEBEB', // 浅蓝色背景
+              textAlign: 'left'
+            }}
+          >
+            {outputText}
+          </div>
         </div>
       </Content>
     </Layout>

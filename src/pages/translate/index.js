@@ -18,7 +18,7 @@ const Translate = () => {
 
   const translateText = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/translate', {
+      const response = await axios.post('http://114.116.202.121:3001/translate', {
         text: inputText,
         sourceLang,
         targetLang,
@@ -47,7 +47,7 @@ const Translate = () => {
     formData.append('targetLang', targetLang);
 
     try {
-      const response = await axios.post('http://localhost:3001/document', formData, {
+      const response = await axios.post('http://114.116.202.121:3001/document', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -62,7 +62,7 @@ const Translate = () => {
 
   const pollDocumentTranslation = async (documentId, documentKey) => {
     try {
-      const response = await axios.get(`http://localhost:3001/document/${documentId}`, {
+      const response = await axios.get(`http://114.116.202.121:3001/document/${documentId}`, {
         params: {
           document_key: documentKey,
         },
@@ -82,7 +82,7 @@ const Translate = () => {
 
   const downloadTranslatedDocument = async (documentId, documentKey) => {
     try {
-      const response = await axios.get(`http://localhost:3001/document/${documentId}/result`, {
+      const response = await axios.get(`http://114.116.202.121:3001/document/${documentId}/result`, {
         responseType: 'blob',
         params: {
           document_key: documentKey,
@@ -160,7 +160,7 @@ const Translate = () => {
               padding: '10px',
               minHeight: '100px',
               overflowY: 'auto',
-              backgroundColor: '#EBEBEB', // 浅蓝色背景
+              backgroundColor: '#EBEBEB', 
               textAlign: 'left'
             }}
           >

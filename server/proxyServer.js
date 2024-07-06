@@ -107,5 +107,5 @@ app.get('/document/:id/result', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`代理服务器运行在 http://localhost:${port}`);
+  console.log(`代理服务器运行在 http://114.116.202.121:${port}`);
 });
